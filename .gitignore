@@ -1,0 +1,21 @@
+# IDE
+.idea/
+.vscode/
+*.iml
+
+# Node
+node_modules/
+dist/
+.angular/
+
+# Java / Spring Boot
+target/
+*.jar
+*.war
+
+# Database
+backend/data/
+
+# OS
+.DS_Store
+Thumbs.db

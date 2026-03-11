@@ -1,0 +1,119 @@
+<div class="editor-container">
+  <!-- Top Bar -->
+  <div class="editor-topbar">
+    <div class="doc-title-area">
+      <i class="material-icons doc-icon">description</i>
+      <input 
+        type="text" 
+        class="title-input" 
+        [ngModel]="docTitle" 
+        (ngModelChange)="onTitleChange($event)"
+        placeholder="未命名文件..."
+      >
+    </div>
+    <div class="editor-actions">
+      <button class="export-btn" (click)="exportMarkdown()" *ngIf="activeDoc">
+        <i class="material-icons btn-icon">file_download</i>
+        匯出
+      </button>
+      <div class="editor-status">
+        <span class="status-msg" *ngIf="activeDoc">已儲存</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div class="empty-editor" *ngIf="!activeDoc">
+    <div class="empty-content">
+      <i class="material-icons empty-icon">edit_document</i>
+      <h2>選擇或建立筆記</h2>
+      <p>點擊側邊欄的新增按鈕開始您的創作旅程</p>
+      
+      <div class="shortcut-hints">
+        <div class="hint-item">
+          <span class="hint-key"># 空白</span>
+          <span class="hint-desc">建立大標題</span>
+        </div>
+        <div class="hint-item">
+          <span class="hint-key">> 空白</span>
+          <span class="hint-desc">建立區塊引用</span>
+        </div>
+        <div class="hint-item">
+          <span class="hint-key">**文字**</span>
+          <span class="hint-desc">粗體文字</span>
+        </div>
+        <div class="hint-item">
+          <span class="hint-key">| 表頭 |</span>
+          <span class="hint-desc">建立表格</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Document Editor Area -->
+  <div class="editor-scroll-area" *ngIf="activeDoc">
+    <div class="notion-document">
+      
+      <!-- Main Title -->
+      <h1 class="document-main-title">{{ docTitle || '未命名文件' }}</h1>
+
+      <!-- Block List Area -->
+      <div class="blocks-container" 
+           cdkDropList 
+           [cdkDropListData]="blocks" 
+           (cdkDropListDropped)="onDrop($event)">
+        
+        <div *ngFor="let block of blocks; let i = index" 
+             class="editor-block-wrapper" 
+             cdkDrag 
+             [cdkDragData]="block">
+             
+          <!-- Drag Handle -->
+          <div class="drag-handle" cdkDragHandle>
+            <svg class="drag-icon" viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+              <circle cx="9" cy="6" r="1.5"></circle>
+              <circle cx="9" cy="12" r="1.5"></circle>
+              <circle cx="9" cy="18" r="1.5"></circle>
+              <circle cx="15" cy="6" r="1.5"></circle>
+              <circle cx="15" cy="12" r="1.5"></circle>
+              <circle cx="15" cy="18" r="1.5"></circle>
+            </svg>
+          </div>
+
+          <!-- The Block Content Area -->
+          <div class="block-content-area">
+            
+            <!-- Rendered HTML View -->
+            <div 
+              [hidden]="block.isEditing"
+              (click)="editBlock(i)"
+              class="markdown-body rich-text-preview" 
+              [innerHTML]="block.html"
+              [class.empty-placeholder]="!block.content"
+              attr.data-placeholder="輸入 '/' 獲得指令，或直接輸入內容..."
+            ></div>
+
+            <!-- Raw Textarea Editing View -->
+            <textarea
+              [hidden]="!block.isEditing"
+              #blockTextareas
+              class="raw-markdown-textarea"
+              [(ngModel)]="block.content"
+              (blur)="renderBlock(i)"
+              (keydown)="onBlockKeydown($event, i)"
+              (input)="adjustTextareaHeight(blockTextareas)"
+              placeholder="輸入 '/' 獲得指令，或直接輸入內容..."
+            ></textarea>
+            
+          </div>
+          
+          <!-- Drag Preview (shows when dragging) -->
+          <div *cdkDragPreview class="drag-preview rich-text-preview markdown-body" [innerHTML]="block.html"></div>
+          
+        </div>
+        
+      </div>
+      
+    </div>
+  </div>
+</div>

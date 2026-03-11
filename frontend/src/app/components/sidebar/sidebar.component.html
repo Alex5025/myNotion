@@ -1,0 +1,44 @@
+<aside class="sidebar" [class.collapsed]="collapsed">
+  <div class="sidebar-header">
+    <div class="logo" *ngIf="!collapsed">
+      <span class="logo-icon">📝</span>
+      <span class="logo-text">我的筆記</span>
+    </div>
+    <button class="toggle-btn" (click)="toggleSidebar()" [attr.title]="collapsed ? '展開側邊欄' : '收起側邊欄'">
+      <span class="toggle-icon">{{ collapsed ? '☰' : '◀' }}</span>
+    </button>
+  </div>
+
+  <div class="sidebar-content" *ngIf="!collapsed">
+    <button class="new-page-btn" (click)="createNew()">
+      <span class="btn-icon">＋</span>
+      <span>新增頁面</span>
+    </button>
+
+    <div class="section-label">我的頁面</div>
+
+    <div class="page-list">
+      <div
+        *ngFor="let doc of documents"
+        class="page-item"
+        [class.active]="doc.id === activeDocId"
+        (click)="selectDocument(doc)"
+      >
+        <span class="page-icon">{{ doc.icon || '📄' }}</span>
+        <span class="page-title">{{ doc.title || '未命名文件' }}</span>
+        <button
+          class="delete-btn"
+          (click)="deleteDocument($event, doc)"
+          title="刪除"
+        >
+          ✕
+        </button>
+      </div>
+    </div>
+
+    <div class="empty-state" *ngIf="documents.length === 0">
+      <p>尚無任何頁面</p>
+      <p class="hint">點擊「新增頁面」開始撰寫</p>
+    </div>
+  </div>
+</aside>
