@@ -28,6 +28,7 @@
 - **拖拽排序 (Drag & Drop)**: 使用 `vuedraggable (Sortable.js)` 實作。支援連同子區塊一起進行整體拖動，保持階層結構。
 - **Markdown 渲染**: 整合 `marked` 套件進行即時轉換。
 - **代碼高亮**: 使用 `highlight.js` 處理程式碼區塊。
+- **表格支援**: 支援標準 Markdown 表格，具備自定義樣式。
 - **安全防護**: 使用 `dompurify` 過濾 Markdown 渲染後的 HTML，防止 XSS 攻擊。
 - **網路請求**: 使用 `axios` 處理前端與後端 API 的通訊。
 

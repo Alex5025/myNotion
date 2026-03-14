@@ -13,6 +13,20 @@
 - 🚀 **RESTful Backend**: Spring Boot backend with H2 database for document persistence.
 - 🎨 **Modern UI**: Clean, responsive interface built with Vue 3 and Vanilla CSS.
 
+## 📝 Markdown Examples
+
+### Tables
+| Name | Role | Status |
+| :--- | :--- | :---: |
+| Antigravity | AI Architect | 🚀 |
+| User | Lead Creator | ✨ |
+| myNotion | Core Engine | 🛠️ |
+
+### Task Lists
+- [x] Hierarchical blocks
+- [x] Drag and drop
+- [ ] Real-time collaboration
+
 ## 🛠️ Tech Stack
 
 ### Frontend
