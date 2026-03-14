@@ -296,7 +296,7 @@ const onDragEnd = () => {
           ></textarea>
 
           <!-- Recursive children of this block -->
-          <div class="nested-blocks" v-if="element.children">
+          <div class="nested-blocks" v-if="element.children && element.children.length > 0">
             <EditorBlockNode
               v-model="element.children"
               @trigger-save="passTriggerSave"
