@@ -27,15 +27,15 @@ function splitMarkdownBlocks(content: string): string[] {
   const lines = content.split('\n');
   let currentBlock: string[] = [];
   let inCodeBlock = false;
-  
+
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i];
     if (line === undefined) continue;
-    
+
     if (line.trim().startsWith('```')) {
       inCodeBlock = !inCodeBlock;
     }
-    
+
     if (!inCodeBlock && line.trim() === '' && !line.includes('\t')) {
       if (currentBlock.length > 0) {
         blocks.push(currentBlock.join('\n'));
@@ -53,28 +53,28 @@ function splitMarkdownBlocks(content: string): string[] {
 
 function markdownToTree(content: string): EditorBlock[] {
   if (!content) return [{ id: generateId(), content: '', isEditing: false, children: [] }];
-  
+
   const rawBlocks = splitMarkdownBlocks(content);
   const rootBlocks: EditorBlock[] = [];
   const path: { block: EditorBlock; depth: number }[] = [];
-  
+
   for (const raw of rawBlocks) {
     if (!raw) continue;
-    
+
     // Determine depth based on the first line's indentation
     const match = raw.match(/^(\t*)/);
     const depth = match && match[1] ? match[1].length : 0;
-    
+
     const blockIndentStr = '\t'.repeat(depth);
     const cleanContent = raw.split('\n').map(line => line.startsWith(blockIndentStr) ? line.substring(depth) : line).join('\n');
-    
+
     const block: EditorBlock = {
       id: generateId(),
       content: cleanContent,
       isEditing: false,
       children: []
     };
-    
+
     if (depth === 0) {
       rootBlocks.push(block);
       path.length = 0;
@@ -94,7 +94,7 @@ function markdownToTree(content: string): EditorBlock[] {
       path.push({ block, depth });
     }
   }
-  
+
   if (rootBlocks.length === 0) {
     return [{ id: generateId(), content: '', isEditing: false, children: [] }];
   }
@@ -121,16 +121,16 @@ watch(
     if (activeDocument.value) {
       docTitle.value = activeDocument.value.title || '';
       const newDocContent = activeDocument.value.content || '';
-      
+
       const currentAssembled = treeToMarkdown(blocks.value).trim();
       const newTrimmed = newDocContent.trim();
-      
+
       if (currentAssembled !== newTrimmed || blocks.value.length === 0) {
         isParsing = true;
         const newBlocks = markdownToTree(newDocContent);
         Promise.all(newBlocks.map(recursivePreRender)).then(() => {
-           blocks.value = newBlocks;
-           isParsing = false;
+          blocks.value = newBlocks;
+          isParsing = false;
         });
       }
     } else {
@@ -212,11 +212,11 @@ function mergeBlock(id: string, _index: number) {
     const parentArr = loc.parent;
     const currentBlock = parentArr[loc.index];
     const prevBlock = parentArr[loc.index - 1];
-    
+
     if (currentBlock && prevBlock) {
       prevBlock.content += currentBlock.content;
       prevBlock.children.push(...currentBlock.children);
-      
+
       parentArr.splice(loc.index, 1);
       prevBlock.isEditing = true;
       triggerSave();
@@ -242,7 +242,7 @@ function outdentBlock(id: string, _index: number) {
   // To outdent, we must remove it from parent and place after parent.
   // Finding parent requires tracking path
   const path: { parent: EditorBlock[]; index: number }[] = [];
-  
+
   function search(list: EditorBlock[]): boolean {
     for (let i = 0; i < list.length; i++) {
       const node = list[i];
@@ -259,11 +259,11 @@ function outdentBlock(id: string, _index: number) {
     }
     return false;
   }
-  
+
   if (search(blocks.value) && path.length > 1) {
     const currentLoc = path.pop();
     const parentLoc = path.pop();
-    
+
     if (currentLoc && parentLoc) {
       const parentArr = currentLoc.parent;
       const targetParentArr = parentLoc.parent;
@@ -280,24 +280,24 @@ function outdentBlock(id: string, _index: number) {
 }
 
 // Focus handling ignored for simplicity of manual textarea operations
-function focusUp(_id: string) {}
-function focusDown(_id: string) {}
+function focusUp(_id: string) { }
+function focusDown(_id: string) { }
 
 function exportMarkdown() {
   if (!activeDocument.value) return;
   const content = treeToMarkdown(blocks.value).trim();
   const title = docTitle.value || '未命名文件';
-  
+
   const markdownContent = `# ${title}\n---\n\n${content}`;
   const blob = new Blob([markdownContent], { type: 'text/markdown;charset=utf-8' });
   const url = window.URL.createObjectURL(blob);
-  
+
   const a = document.createElement('a');
   a.href = url;
   a.download = `${title}.md`;
   document.body.appendChild(a);
   a.click();
-  
+
   document.body.removeChild(a);
   window.URL.revokeObjectURL(url);
 }
@@ -327,11 +327,12 @@ function exportMarkdown() {
       <div class="empty-content">
         <h2>選擇或建立筆記</h2>
         <p>點擊側邊欄的新增按鈕開始您的創作旅程</p>
-        
+
         <div class="shortcut-hints">
           <div class="hint-item"><span class="hint-key"># 空白</span><span class="hint-desc">建立大標題</span></div>
           <div class="hint-item"><span class="hint-key">> 空白</span><span class="hint-desc">建立區塊引用</span></div>
-          <div class="hint-item"><span class="hint-key">Tab / Shift+Tab</span><span class="hint-desc">縮排 / 取消縮排</span></div>
+          <div class="hint-item"><span class="hint-key">Tab / Shift+Tab</span><span class="hint-desc">縮排 / 取消縮排</span>
+          </div>
         </div>
       </div>
     </div>
@@ -339,28 +340,15 @@ function exportMarkdown() {
     <!-- Document Editor Area -->
     <div class="editor-scroll-area" v-if="activeDocument">
       <div class="notion-document">
-        
-        <input 
-          type="text" 
-          class="document-main-title" 
-          v-model="docTitle" 
-          @input="onTitleChange"
-          placeholder="未命名文件"
-        >
+
+        <input type="text" class="document-main-title" v-model="docTitle" @input="onTitleChange" placeholder="未命名文件">
 
         <div class="blocks-root-container">
-            <EditorBlockNode
-              v-model="blocks"
-              @trigger-save="triggerSave"
-              @split-block="splitBlock"
-              @merge-block="mergeBlock"
-              @indent-block="indentBlock"
-              @outdent-block="outdentBlock"
-              @focus-up="focusUp"
-              @focus-down="focusDown"
-            />
+          <EditorBlockNode v-model="blocks" @trigger-save="triggerSave" @split-block="splitBlock"
+            @merge-block="mergeBlock" @indent-block="indentBlock" @outdent-block="outdentBlock" @focus-up="focusUp"
+            @focus-down="focusDown" />
         </div>
-        
+
       </div>
     </div>
   </div>
@@ -390,14 +378,16 @@ function exportMarkdown() {
   color: rgba(55, 53, 47, 0.6);
 }
 
-.breadcrumb-item, .breadcrumb-current {
+.breadcrumb-item,
+.breadcrumb-current {
   cursor: pointer;
   padding: 4px 6px;
   border-radius: 4px;
   transition: background 0.1s;
 }
 
-.breadcrumb-item:hover, .breadcrumb-current:hover {
+.breadcrumb-item:hover,
+.breadcrumb-current:hover {
   background: rgba(55, 53, 47, 0.08);
 }
 
