@@ -200,6 +200,45 @@ const passMergeBlock = (id: string, idx: number) => emit('merge-block', id, idx)
 const passIndentBlock = (id: string, idx: number) => emit('indent-block', id, idx);
 const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, idx);
 
+const getBlockClass = (block: EditorBlock) => {
+  const content = (block.content || '').trim();
+  if (content.startsWith('# ')) return 'is-h1';
+  if (content.startsWith('## ')) return 'is-h2';
+  if (content.startsWith('### ')) return 'is-h3';
+  return 'is-normal';
+};
+
+const reorderNumberedLists = (nodeList: EditorBlock[]) => {
+  let currentNumber = 1;
+
+  for (const block of nodeList) {
+    const trimmed = (block.content || '').trim();
+    // Match something like "1. ", "12. ", etc at the start
+    const match = trimmed.match(/^(\d+)\.\s/);
+
+    if (match) {
+      const newContent = block.content.replace(/^(\s*)\d+\.\s/, `$1${currentNumber}. `);
+      if (block.content !== newContent) {
+        block.content = newContent;
+        // Trigger HTML re-render for this block if content changed
+        renderHtml(block.content).then(html => block.html = html);
+      }
+      currentNumber++;
+    } else {
+      currentNumber = 1;
+    }
+
+    if (block.children && block.children.length > 0) {
+      reorderNumberedLists(block.children);
+    }
+  }
+};
+
+const onDragEnd = () => {
+  reorderNumberedLists(blocks.value);
+  emit('trigger-save');
+};
+
 </script>
 
 <template>
@@ -211,10 +250,10 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
     class="blocks-container"
     ghost-class="ghost-block"
     drag-class="drag-block"
-    @end="emit('trigger-save')"
+    @end="onDragEnd"
   >
     <template #item="{ element, index }">
-      <div class="editor-block-wrapper" :class="{ 'active-menu-block': activeMenuId === element.id }">
+      <div class="editor-block-wrapper" :class="[getBlockClass(element), { 'active-menu-block': activeMenuId === element.id }]">
         <div class="drag-handle" :class="{ 'menu-open': activeMenuId === element.id }" @click="toggleMenu($event, element.id)">
           <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
             <circle cx="9" cy="6" r="1.5"></circle>
@@ -302,13 +341,24 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
   cursor: grab;
   opacity: 0;
   transition: opacity 0.2s;
-  padding-top: 2px;
   margin-right: 4px;
   position: absolute;
   left: -28px;
-  top: 4px;
+  top: 5px;
   height: 24px;
   border-radius: 4px;
+}
+
+.editor-block-wrapper.is-h1 .drag-handle {
+  top: 13px;
+}
+
+.editor-block-wrapper.is-h2 .drag-handle {
+  top: 8px;
+}
+
+.editor-block-wrapper.is-h3 .drag-handle {
+  top: 6px;
 }
 .drag-handle:hover {
   background-color: rgba(55, 53, 47, 0.08);
@@ -330,9 +380,25 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
   cursor: text;
   min-height: 28px;
   line-height: 1.5;
-  font-size: 16px;
-  word-wrap: break-word;
   color: #37352f;
+}
+
+.editor-block-wrapper.is-h1 .rich-text-preview {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.editor-block-wrapper.is-h2 .rich-text-preview {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.editor-block-wrapper.is-h3 .rich-text-preview {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .rich-text-preview.empty-placeholder::before {
@@ -340,6 +406,18 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
   color: #d3d3d3;
   position: absolute;
   pointer-events: none;
+}
+
+:deep(.markdown-body p),
+:deep(.markdown-body h1),
+:deep(.markdown-body h2),
+:deep(.markdown-body h3),
+:deep(.markdown-body ul),
+:deep(.markdown-body ol),
+:deep(.markdown-body pre),
+:deep(.markdown-body blockquote) {
+  margin-top: 0 !important;
+  margin-bottom: 0px !important;
 }
 
 :deep(.markdown-body blockquote) {
@@ -381,11 +459,27 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
   resize: none;
   outline: none;
   font-family: inherit;
-  font-size: 16px;
-  line-height: 1.5;
   color: #37352f;
   padding: 3px 2px;
   overflow: hidden;
+}
+
+.editor-block-wrapper.is-h1 .raw-markdown-textarea {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.editor-block-wrapper.is-h2 .raw-markdown-textarea {
+  font-size: 24px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.editor-block-wrapper.is-h3 .raw-markdown-textarea {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
 .nested-blocks {

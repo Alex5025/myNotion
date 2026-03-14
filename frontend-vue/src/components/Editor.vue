@@ -329,9 +329,17 @@ function exportMarkdown() {
         <p>點擊側邊欄的新增按鈕開始您的創作旅程</p>
 
         <div class="shortcut-hints">
-          <div class="hint-item"><span class="hint-key"># 空白</span><span class="hint-desc">建立大標題</span></div>
-          <div class="hint-item"><span class="hint-key">> 空白</span><span class="hint-desc">建立區塊引用</span></div>
-          <div class="hint-item"><span class="hint-key">Tab / Shift+Tab</span><span class="hint-desc">縮排 / 取消縮排</span>
+          <div class="hint-item">
+            <span class="hint-key"># 空白</span>
+            <span class="hint-desc">建立大標題</span>
+          </div>
+          <div class="hint-item">
+            <span class="hint-key">> 空白</span>
+            <span class="hint-desc">建立區塊引用</span>
+          </div>
+          <div class="hint-item">
+            <span class="hint-key">Tab / Shift+Tab</span>
+            <span class="hint-desc">縮排 / 取消縮排</span>
           </div>
         </div>
       </div>
