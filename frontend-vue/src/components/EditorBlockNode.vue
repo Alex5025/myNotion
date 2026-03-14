@@ -290,7 +290,7 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
 }
 
 .editor-block-wrapper.active-menu-block {
-  background-color: rgba(55, 53, 47, 0.08);
+  background-color: rgba(55, 53, 47, 0.16);
 }
 
 .drag-handle {
@@ -343,7 +343,7 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
 }
 
 :deep(.markdown-body blockquote) {
-  background-color: rgba(55, 53, 47, 0.08);
+  background-color: rgba(55, 53, 47, 0.16);
   border-left: 3px solid rgba(55, 53, 47, 0.8);
   padding: 8px 14px;
   margin: 4px 0;
@@ -391,7 +391,7 @@ const passOutdentBlock = (id: string, idx: number) => emit('outdent-block', id, 
 .nested-blocks {
   margin-left: 24px;
   padding-left: 4px;
-  border-left: 2px solid rgba(55, 53, 47, 0.16);
+  border-left: 3px solid rgba(55, 53, 47, 0.4);
 }
 
 .block-menu {
