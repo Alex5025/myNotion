@@ -1,5 +1,0 @@
-{
-  "title": "📝 本週開發與任務清單",
-  "icon": "📝",
-  "content": "# 本週開發任務清單\n\n這裡示範了如何利用新的階層區塊以及 markdown 來輕鬆管理您的代辦事項與重點筆記。\n\n## 待辦事項 (To-Do)\n*   [x] 升級 Vue 3 與 Vite 環境\n*   [x] 替換 RxJS 為 Composition API 狀態管理\n*   [ ] 實作全域搜尋功能 (Global Search)\n*   [ ] 串接 WebRTC/WebSocket 實現多人協作\n\n## 近期挑戰\n1. 解決所有的 TypeScript 嚴格警告。\n2. 確保編輯器在行動裝置上的拖拽體驗 (Touch Event Support)。\n\n> \"Quality is not an act, it is a habit.\" - Aristotle\n\n## 開發會議記錄\n*   **2026/03/12**\n\t*   確認使用 H2 作為本地開發資料庫\n\t*   調整了 Sidebar 的 RWD 斷點配置\n\t*   修復 Spring Boot API 的 CORS 跨域連線機制\n\t\t*   此調整確保了 Vue 開發伺服器 (`localhost:5173`) 能順利存取 8081 埠。\n\n## 📝 測試資料表 (Test Data Table)\n\n| 模組 | 版本 | 狀態 |\n| :--- | :--- | :--- |\n| Backend | 3.2.3 | 運作中 |\n| Frontend | Vue 3 | 待最佳化 |\n| Database | H2 | 開發模式 |"
-}

@@ -1,5 +1,0 @@
-{
-  "title": "🌟 歡迎使用 Vue Notion Clone 🌟",
-  "icon": "🌟",
-  "content": "# 歡迎使用 Vue 3 打造的 Notion Clone!\n\n這裡展示了全新設計的「階層式區塊編輯器 (Hierarchical Blocks)」的強大功能。\n\n## 核心功能展示\n\n你可以直接在這裡輸入內容，按下 Enter 產生新區塊。\n如果在空區塊按下 Backspace，則會與上一個區塊合併！\n\n### 1. 拖拉排序 (Drag and Drop)\n將滑鼠移至區塊左側的六個點圖示並按住，即可將整個區塊**連同它的子區塊**一起輕鬆拖移到新的位置。\n\n### 2. 階層縮排 (Indentation)\n在行首使用 Tab 鍵可以將此區塊變為上一行的子區塊。\n\t這是第一層子區塊，試著拖拉上方標題，我會跟著移動喔！\n\t\t這被包裝在第二層了\n使用 Shift + Tab 則可以切換向外提升一個層級。\n\n### 3. Markdown 語法支持\n完全支援豐富的 Markdown 語法與樣式即時預覽：\n*   **粗體**、*斜體*、~~刪除線~~\n*   [超連結](https://vuejs.org/)\n\n### 4. 程式碼區塊高亮 (Highlight.js)\n```typescript\nimport { ref } from 'vue';\n\nconst editorVersion = ref('Vue 3');\nconsole.log(`Welcome to ${editorVersion.value} Notion!`);\n```\n\n### 6. 表格範例 (Tables)\n支援標準 Markdown 表格，並且擁有 Notion 風格的格狀外觀：\n\n| 功能 | 支援度 | 備註 |\n| :--- | :---: | :--- |\n| 階層編輯 | ✅ | 無限深度 |\n| 拖拽排序 | ✅ | 包含子區塊 |\n| Markdown | ✅ | 即時渲染 |\n| 表格樣式 | ✅ | Notion 風格 |\n\n---\n立刻開始你的創作旅程吧！"
-}

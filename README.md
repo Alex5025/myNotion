@@ -57,6 +57,8 @@ cd backend
 ./mvnw spring-boot:run
 ```
 Running on: `http://localhost:8081`
+- Swagger UI: `http://localhost:8081/swagger-ui.html`
+- API Docs: `http://localhost:8081/v3/api-docs`
 
 #### 2. Frontend
 ```bash
