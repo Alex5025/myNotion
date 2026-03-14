@@ -11,6 +11,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/documents")
+@CrossOrigin(origins = "http://localhost:5173", maxAge = 3600)
 @RequiredArgsConstructor
 public class DocumentController {
 
